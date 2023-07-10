@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <fragment
+        android:id="@+id/inputScreen"
+        android:name="com.example.app.InputFragment"
+        android:label="Input" />
+
+    <fragment
+        android:id="@+id/loadingScreen"
+        android:name="com.example.app.LoadingScreen"
+        android:label="Loading">
+        <argument
+            android:name="number1"
+            app:argType="integer" />
+        <argument
+            android:name="number2"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/resultScreen"
+        android:name="com.example.app.ResultFragment"
+        android:label="Result" />
+
+    <action
+        android:id="@+id/action_inputFragment_to_loadingFragment"
+        app:destination="@id/loadingScreen" />
+
+    <action
+        android:id="@+id/action_loadingFragment_to_resultFragment"
+        app:destination="@id/resultScreen" />
+
+</navigation>

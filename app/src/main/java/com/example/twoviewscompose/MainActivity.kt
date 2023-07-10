@@ -1,24 +1,20 @@
 package com.example.twoviewscompose
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.example.twoviewscompose.ui.theme.TwoViewsComposeTheme
+import androidx.core.os.bundleOf
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.twoviewscompose.ui.screens.InputScreen
+import com.example.twoviewscompose.ui.screens.LoadingScreen
+import com.example.twoviewscompose.ui.screens.ResultScreen
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -26,19 +22,34 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
 fun MyApp() {
-    Surface(color = MaterialTheme.colors.background) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val number1 = remember { mutableStateOf(0) }
-            val number2 = remember { mutableStateOf(0) }
+    val navController = rememberNavController()
 
-            InputFields(number1, number2)
-            Spacer(modifier = Modifier.height(16.dp))
-            NextButton(number1, number2)
+    NavHost(navController = navController, startDestination = "inputFragment") {
+        composable("inputFragment") {
+            InputScreen(navController = navController) { number1, number2 ->
+                val bundle = bundleOf(
+                    "number1" to number1,
+                    "number2" to number2
+                )
+                navController.navigate("loadingFragment/$bundle")
+            }
+        }
+        composable("loadingFragment/{number1}/{number2}") { backStackEntry ->
+            val number1 = backStackEntry.arguments?.getInt("number1") ?: 0
+            val number2 = backStackEntry.arguments?.getInt("number2") ?: 0
+            LoadingScreen(
+                navController = navController,
+                number1 = number1,
+                number2 = number2
+            ) {
+                navController.navigate("resultFragment")
+            }
+        }
+        composable("resultFragment") {
+            ResultScreen(navController = navController)
         }
     }
 }
