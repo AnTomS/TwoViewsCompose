@@ -18,13 +18,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import com.example.twoviewscompose.navigation.Screen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InputScreen(navController: NavController, param: (Any, Any) -> Unit) {
+fun InputScreen(navController: NavController) {
     val number1 = remember { mutableStateOf(0) }
     val number2 = remember { mutableStateOf(0) }
     val showErrorSnackbar = remember { mutableStateOf(false) }
@@ -49,19 +49,15 @@ fun InputScreen(navController: NavController, param: (Any, Any) -> Unit) {
         Button(
             onClick = {
                 if (number1.value != 0 && number2.value != 0) {
-                    val bundle = bundleOf(
-                        "number1" to number1.value,
 
-                        "number2" to number2.value
-                    )
-                    navController.navigate("loadingScreen/$bundle")
+                    navController.navigate(Screen.LoadingScreen.routeWithArgs(number1, number2))
                 } else {
                     showErrorSnackbar.value = true
                 }
             },
             enabled = number1.value != 0 && number2.value != 0
         ) {
-            Text("Next")
+            Text("Next Screen")
         }
     }
 
