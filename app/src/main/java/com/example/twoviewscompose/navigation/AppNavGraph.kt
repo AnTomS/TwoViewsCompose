@@ -14,9 +14,10 @@ import com.example.twoviewscompose.viewmodel.LoadingViewModel
 
 
 
-
+//файл навигации для переключения экранов
 @Composable
 fun Navigation() {
+    //
     val navController = rememberNavController()
     val loadingViewModel = viewModel<LoadingViewModel>()
     NavHost(navController = navController, startDestination = Screen.InputScreen.route) {
