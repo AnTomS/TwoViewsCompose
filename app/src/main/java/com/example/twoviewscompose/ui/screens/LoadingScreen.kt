@@ -10,18 +10,22 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.twoviewscompose.navigation.Screen
+import com.example.twoviewscompose.viewmodel.LoadingViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun LoadingScreen(navController: NavController, number1: Int, number2: Int, function: () -> Unit) {
-    val bundle = requireNotNull(navController.previousBackStackEntry?.arguments)
-    val number1 = bundle.getInt("number1")
-    val number2 = bundle.getInt("number2")
-
-    // Имитация задержки загрузки данных
+fun LoadingScreen(
+    navController: NavController,
+    number1: Int,
+    number2: Int,
+    loadingViewModel: LoadingViewModel
+) {
     LaunchedEffect(Unit) {
         delay(2000)
-        navController.navigate("resultScreen/$number1/$number2")
+        loadingViewModel.updateSum(number1, number2)
+        loadingViewModel.getUsersFromRepository()
+        navController.navigate(Screen.ResultScreen.route)
     }
 
     Column(

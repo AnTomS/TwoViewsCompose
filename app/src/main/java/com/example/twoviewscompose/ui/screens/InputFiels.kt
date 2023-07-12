@@ -50,7 +50,12 @@ fun InputScreen(navController: NavController) {
             onClick = {
                 if (number1.value != 0 && number2.value != 0) {
 
-                    navController.navigate(Screen.LoadingScreen.routeWithArgs(number1, number2))
+                    navController.navigate(
+                        Screen.LoadingScreen.routeWithNumberArgs(
+                            number1.value,
+                            number2.value
+                        )
+                    )
                 } else {
                     showErrorSnackbar.value = true
                 }

@@ -12,31 +12,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.twoviewscompose.data.repository.UserRepository
+import com.example.twoviewscompose.viewmodel.LoadingViewModel
 
 
 @Composable
-fun ResultScreen(navController: NavController) {
-    val bundle = requireNotNull(navController.previousBackStackEntry?.arguments)
-    val number1 = bundle.getInt("number1")
-    val number2 = bundle.getInt("number2")
-
-    val sum = number1 + number2
-    val users = UserRepository.getUsers()
+fun ResultScreen(navController: NavController,loadingViewModel: LoadingViewModel) {
+    val sum = loadingViewModel.sum.value
+    val users = loadingViewModel.userList.value
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Sum: $sum")
-        Spacer(modifier = Modifier.height(16.dp))
-        Text("Users: $users")
 
         Button(
             onClick = { navController.popBackStack() }
         ) {
-            Text("Go Back")
+            Text("Вернуться назад")
         }
+
+
+        Text("Sum: $sum")
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("Users: ${users.joinToString(", ")}")
+
+
     }
 }
