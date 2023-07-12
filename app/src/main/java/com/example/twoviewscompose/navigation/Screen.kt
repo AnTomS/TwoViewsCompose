@@ -8,11 +8,11 @@ sealed class Screen(val route: String) {
     object LoadingScreen : Screen("loading_screen")
     object ResultScreen : Screen("result_screen")
 
-    fun routeWithNumberArgs(number1: Int, number2: Int): String {
+    fun routeWithNumberArgs(number1: Long, number2: Long): String {
         return "$route/$number1/$number2"
     }
 
-    fun routeWithSumAndListArgs(sum: MutableState<Int>, userList: MutableState<List<User>>) =
+    fun routeWithSumAndListArgs(sum: MutableState<Long>, userList: MutableState<List<User>>) =
         buildString {
             append(route)
             append("/${sum.value}")

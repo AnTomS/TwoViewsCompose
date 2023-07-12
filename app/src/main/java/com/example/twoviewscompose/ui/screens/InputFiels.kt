@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Snackbar
@@ -17,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.twoviewscompose.navigation.Screen
@@ -25,8 +27,8 @@ import com.example.twoviewscompose.navigation.Screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputScreen(navController: NavController) {
-    val number1 = remember { mutableStateOf(0) }
-    val number2 = remember { mutableStateOf(0) }
+    val number1 = remember { mutableStateOf("") }
+    val number2 = remember { mutableStateOf("") }
     val showErrorSnackbar = remember { mutableStateOf(false) }
 
     Column(
@@ -35,32 +37,37 @@ fun InputScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
-            value = number1.value.toString(),
-            onValueChange = { number1.value = it.toIntOrNull() ?: 0 },
-            label = { Text("Number 1") }
+            value = number1.value,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onValueChange = { input ->
+                number1.value = input
+            },
+            label = { Text("Введите число 1") }
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
-            value = number2.value.toString(),
-            onValueChange = { number2.value = it.toIntOrNull() ?: 0 },
-            label = { Text("Number 2") }
+            value = number2.value,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onValueChange = { input ->
+                number2.value = input
+            },
+            label = { Text("Введите число 2") }
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                if (number1.value != 0 && number2.value != 0) {
-
+                if (number1.value.isNotEmpty() && number2.value.isNotEmpty()) {
                     navController.navigate(
                         Screen.LoadingScreen.routeWithNumberArgs(
-                            number1.value,
-                            number2.value
+                            number1.value.toLong(),
+                            number2.value.toLong()
                         )
                     )
                 } else {
                     showErrorSnackbar.value = true
                 }
             },
-            enabled = number1.value != 0 && number2.value != 0
+            enabled = number1.value.isNotEmpty() && number2.value.isNotEmpty()
         ) {
             Text("Next Screen")
         }

@@ -13,6 +13,8 @@ import com.example.twoviewscompose.ui.screens.ResultScreen
 import com.example.twoviewscompose.viewmodel.LoadingViewModel
 
 
+
+
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
@@ -24,17 +26,17 @@ fun Navigation() {
 
         composable(Screen.LoadingScreen.route + "/{number1}/{number2}", arguments = listOf(
             navArgument("number1") {
-                type = NavType.IntType
+                type = NavType.LongType
             },
             navArgument("number2") {
-                type = NavType.IntType
+                type = NavType.LongType
             }
 
         )) { entry ->
             LoadingScreen(
                 navController = navController,
-                number1 = entry.arguments?.getInt("number1") ?: 0,
-                number2 = entry.arguments?.getInt("number2") ?: 0,
+                number1 = entry.arguments?.getLong("number1") ?: 0,
+                number2 = entry.arguments?.getLong("number2") ?: 0,
                 loadingViewModel = loadingViewModel
             )
         }

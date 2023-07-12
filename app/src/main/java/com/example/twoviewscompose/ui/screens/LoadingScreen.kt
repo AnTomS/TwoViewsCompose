@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.twoviewscompose.navigation.Screen
 import com.example.twoviewscompose.viewmodel.LoadingViewModel
@@ -17,8 +18,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun LoadingScreen(
     navController: NavController,
-    number1: Int,
-    number2: Int,
+    number1: Long,
+    number2: Long,
     loadingViewModel: LoadingViewModel
 ) {
     LaunchedEffect(Unit) {
@@ -33,6 +34,9 @@ fun LoadingScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Loading...")
+        Text(
+            text = "Вычисление суммы и загрузка списка пользователей",
+            fontSize = 28.sp,
+        )
     }
 }
