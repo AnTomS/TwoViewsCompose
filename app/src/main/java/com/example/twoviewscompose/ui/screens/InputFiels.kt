@@ -22,63 +22,85 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.twoviewscompose.navigation.Screen
+import com.example.twoviewscompose.viewmodel.LoadingViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
+//создаём экран ввода чисел, в качестве параметров указываем Навконтроллер и вьюмодель
 @Composable
-fun InputScreen(navController: NavController) {
-    val number1 = remember { mutableStateOf("") }
-    val number2 = remember { mutableStateOf("") }
-    val showErrorSnackbar = remember { mutableStateOf(false) }
+fun InputScreen(navController: NavController, loadingViewModel: LoadingViewModel) {
 
+    //создаём экзепляр переменной для отслеживания 1 ввёденого числа
+    val number1 = loadingViewModel.number1.value
+
+    //создаём экзепляр переменной для отслеживания 1 ввёденого числа
+    val number2 = loadingViewModel.number2.value
+
+    //создаём экзепляр переменной для показа ошибку о пустом поле ввода
+    val showErrorSnackbar = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val number1 = loadingViewModel.number1.value
+        val number2 = loadingViewModel.number2.value
+
         TextField(
-            value = number1.value,
+            // сохраняем в переменную вводимое число и преобразовываем число в строку
+            value = number1.toString(),
+
+            // прямо указываем что мы ожидаем поулчить число и показываем пользователю только цифровую клавиатуру
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+
+            //с помощью функции onValueChange отображаем вводимое число и сохраняем его в переменную с помощью нашей viewmodel и метода updateNumber1(input)
             onValueChange = { input ->
-                number1.value = input
+                loadingViewModel.updateNumber1(input)
             },
+            //описание кнопки, подсказка для пользователя
             label = { Text("Введите число 1") }
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
-            value = number2.value,
+            // сохраняем в переменную вводимое число и преобразовываем число в строку
+            value = number2.toString(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             onValueChange = { input ->
-                number2.value = input
+                loadingViewModel.updateNumber2(input)
             },
             label = { Text("Введите число 2") }
         )
         Spacer(modifier = Modifier.height(16.dp))
+
+        //обработка кнопки "Next Screen"
         Button(
             onClick = {
-                if (number1.value.isNotEmpty() && number2.value.isNotEmpty()) {
-                    navController.navigate(
-                        Screen.LoadingScreen.routeWithNumberArgs(
-                            number1.value.toLong(),
-                            number2.value.toLong()
-                        )
-                    )
+                // здесь мы встречаем перое условие, с помощью метода isValidInput() проверяем наличие пустого поля ввода
+                if (loadingViewModel.isValidInput()) {
+                    //если оба окна не пустые. то делаем кнопку доступной для нажатия и вызываем метод updateSum() и считаем сумму
+                    loadingViewModel.updateSum()
+                    //и осуществляем переход на следующий экран
+                    navController.navigate(Screen.LoadingScreen.route)
                 } else {
-                    showErrorSnackbar.value = true
+                    //если же одно из полей пустое, то вызываем метод showErrorSnackbar(). кнпока остаётся неактивной
+                    loadingViewModel.showErrorSnackbar()
                 }
             },
-            enabled = number1.value.isNotEmpty() && number2.value.isNotEmpty()
+            //enabled - это параметр кнопки, который определяет, доступна ли кнопка для нажатия.
+            // Если enabled установлен в true, то кнопка будет активной и пользователь сможет нажать на нее.
+            // Если enabled установлен в false, то кнопка будет неактивной и пользователь не сможет нажать на нее.
+            enabled = loadingViewModel.isValidInput()
         ) {
             Text("Next Screen")
         }
     }
 
-    if (showErrorSnackbar.value) {
+    if (loadingViewModel.showSnackbar.value) {
         Snackbar(
             modifier = Modifier.padding(16.dp),
             action = {
                 TextButton(
-                    onClick = { showErrorSnackbar.value = false }
+                    onClick = { loadingViewModel.dismissSnackbar() }
                 ) {
                     Text("Dismiss")
                 }

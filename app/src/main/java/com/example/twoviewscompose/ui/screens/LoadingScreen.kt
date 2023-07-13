@@ -15,17 +15,29 @@ import com.example.twoviewscompose.navigation.Screen
 import com.example.twoviewscompose.viewmodel.LoadingViewModel
 import kotlinx.coroutines.delay
 
+
+////создаём экран симуляции овтета с сервера, в качестве параметров указываем Навконтроллер и вьюмодель
 @Composable
 fun LoadingScreen(
     navController: NavController,
-    number1: Long,
-    number2: Long,
     loadingViewModel: LoadingViewModel
 ) {
+
+    //создаём экзепляр переменной для отслеживания 1 ввёденого числа
+    val number1 = loadingViewModel.number1.value
+
+    //создаём экзепляр переменной для отслеживания 1 ввёденого числа
+    val number2 = loadingViewModel.number2.value
+
+    //очень интересный момент, симуляция ответа от сервера, просто использу. задежрку в 2 секунды)
     LaunchedEffect(Unit) {
         delay(2000)
-        loadingViewModel.updateSum(number1, number2)
+        //вызываю метод для подсчёта суммы чисел
+        loadingViewModel.updateSum()
+
+        //вызываю метод для получения списка пользователей из репозитория
         loadingViewModel.getUsersFromRepository()
+        //навигация к экрану вывода результата
         navController.navigate(Screen.ResultScreen.route)
     }
 

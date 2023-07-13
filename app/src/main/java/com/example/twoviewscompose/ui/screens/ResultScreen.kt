@@ -29,9 +29,14 @@ import com.example.twoviewscompose.navigation.Screen
 import com.example.twoviewscompose.viewmodel.LoadingViewModel
 
 
+//создаём экран для отображения суммы и списка пользователей, в качестве параметров указываем Навконтроллер и вьюмодель
 @Composable
 fun ResultScreen(navController: NavController, loadingViewModel: LoadingViewModel) {
+
+    //создаём экзепляр переменной для отслеживания суммы и передаём ему данные из viewModel
     val sum = loadingViewModel.sum.value
+
+    //создаём экзепляр переменной для отслеживания списка пользователей
     val users = loadingViewModel.userList.value
 
     Column(
@@ -39,11 +44,13 @@ fun ResultScreen(navController: NavController, loadingViewModel: LoadingViewMode
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Кнопка назад
+        // кнопка назад. Происходит переход на экран ввода чисел с очищением стэка
         Button(
             onClick = { navController.popBackStack(Screen.InputScreen.route, inclusive = false) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White,
-                contentColor = Color.White),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = Color.White
+            ),
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.Start)
@@ -53,10 +60,11 @@ fun ResultScreen(navController: NavController, loadingViewModel: LoadingViewMode
                 text = "Назад",
                 style = TextStyle(
                     color = Color.Blue,
-                    ))
+                )
+            )
         }
 
-        // Окно с текстом суммы
+        // Окно для отображения суммы
         Box(
             modifier = Modifier
                 .padding(16.dp)
@@ -103,6 +111,8 @@ fun ResultScreen(navController: NavController, loadingViewModel: LoadingViewMode
     }
 }
 
+
+//аннотация Превью помогает увидеть как расположены объекты, их цвет и все настройки на экране, не запуская всё полностью приложение
 @Composable
 @Preview(name = "test")
 fun ResultScreenPreview() {
